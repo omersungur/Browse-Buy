@@ -23,3 +23,4 @@ rootProject.name = "Browse & Buy"
 include(":app")
 include(":domain")
 include(":data")
+include(":compose-ui")
