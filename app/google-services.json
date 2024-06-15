@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "138306345585",
+    "project_id": "browsebuy-a3670",
+    "storage_bucket": "browsebuy-a3670.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138306345585:android:d8ba55793a8e0934a999d0",
+        "android_client_info": {
+          "package_name": "com.omersungur.browsebuy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv9h83T1UrezQ6_GysVqQ4yswi9dBq-0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
