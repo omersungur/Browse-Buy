@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Browse & Buy"
 include(":app")
- 
+include(":domain")
