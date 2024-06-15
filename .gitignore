@@ -106,3 +106,4 @@ ndk_locator_record.json
 .vscode/settings.json
 app/.settings/org.eclipse.buildship.core.prefs
 app/.cxx
+/.idea/deploymentTargetSelector.xml
