@@ -1,0 +1,23 @@
+<resources>
+    <string name="title_activity_onboarding">OnboardingActivity</string>
+    <string name="next">Next</string>
+
+    <!-- First Onboarding Screen -->
+    <string name="two_cardboard_packs">Two cardboard packs</string>
+    <string name="three_dots_showing_the_first">Three dots, showing the first</string>
+    <string name="find_the_item_you_are_looking_for">Everything You Need"</string>
+    <string name="first_screen_description">Discover a vast range of products across multiple categories, all in one place.</string>
+
+    <!-- Second Onboarding Screen -->
+    <string name="three_dots_showing_the_second">Three dots, showing the second</string>
+    <string name="fast_delivery">Fast Delivery</string>
+    <string name="truck">Truck</string>
+    <string name="second_screen_description">Get your orders delivered to your doorstep faster than ever with our efficient delivery service.</string>
+
+    <!-- Third Onboarding Screen -->
+    <string name="secure_payment">Safe and Secure Payments</string>
+    <string name="third_screen_description">Shop with confidence using our highly secure payment system that ensures your data is always protected.</string>
+    <string name="credit_card_image">Credit card image</string>
+    <string name="three_dots_showing_the_third">Three dots, showing the third</string>
+
+</resources>
