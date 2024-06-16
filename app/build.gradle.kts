@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":compose-ui"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":feature:splash"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
