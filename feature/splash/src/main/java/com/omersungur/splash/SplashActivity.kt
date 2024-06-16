@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.omersungur.compose_ui.theme.C_C8DDFF
 import com.omersungur.domain.util.SharedPref
 import kotlinx.coroutines.delay
 
@@ -46,7 +47,7 @@ class SplashActivity : ComponentActivity() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFC8DDFF))
+                    .background(Color.C_C8DDFF)
                     .scale(scale.value),
                 contentAlignment = Alignment.Center,
             ) {
