@@ -18,3 +18,7 @@ val Color.Companion.Primary: Color
 @Stable
 val Color.Companion.C_F4F7FF: Color
     get() = Color(0xFFF4F7FF)
+
+@Stable
+val Color.Companion.C_C8DDFF: Color
+    get() = Color(0xFFC8DDFF)
