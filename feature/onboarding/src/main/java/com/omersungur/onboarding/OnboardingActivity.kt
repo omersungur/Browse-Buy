@@ -9,8 +9,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.omersungur.auth.AuthenticationActivity
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.domain.util.SharedPref
+import com.omersungur.domain.util.goToTheActivity
 import com.omersungur.onboarding.navigation.OnboardingNavGraph
 
 class OnboardingActivity : ComponentActivity() {
@@ -37,6 +39,6 @@ class OnboardingActivity : ComponentActivity() {
 
     private fun intentToAuth() {
         SharedPref(this).saveOnboardingShowingState()
-        // TODO: Intent to Auth Activity
+        goToTheActivity(AuthenticationActivity(), true)
     }
 }
