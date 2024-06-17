@@ -41,6 +41,9 @@ fun OnBoardingScreenUI(
     onNextClicked: () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
+
+        Spacer(modifier = Modifier.weight(weight = 1f))
+
         Image(
             modifier = Modifier
                 .size(imageSize)
