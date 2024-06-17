@@ -21,8 +21,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.omersungur.auth.AuthenticationActivity
 import com.omersungur.compose_ui.theme.C_C8DDFF
 import com.omersungur.domain.util.SharedPref
+import com.omersungur.domain.util.goToTheActivity
+import com.omersungur.onboarding.OnboardingActivity
 import kotlinx.coroutines.delay
 
 class SplashActivity : ComponentActivity() {
@@ -63,10 +66,10 @@ class SplashActivity : ComponentActivity() {
 
 private fun checkShowedOnboardingStateAndGoOtherActivity(activity: Activity) {
     if (SharedPref(context = activity).isShowingOnboardingScreen()) {
-        // TODO: Go to the onboarding activity
+        activity.goToTheActivity(activityToGo = OnboardingActivity(), isFinish = true)
     } else if (SharedPref(context = activity).isLoggedIn()) {
         // TODO: Go to the main activity
     } else {
-        // TODO: Go to the authentication activity
+        activity.goToTheActivity(activityToGo = AuthenticationActivity(), isFinish = true)
     }
 }

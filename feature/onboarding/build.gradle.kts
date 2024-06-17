@@ -47,6 +47,7 @@ android {
 dependencies {
     implementation(project(":compose-ui"))
     implementation(project(":domain"))
+    implementation(project(":feature:auth"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -65,7 +66,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 }
