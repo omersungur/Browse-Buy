@@ -21,7 +21,7 @@ class SharedPref(context: Context) {
 
     fun isShowingOnboardingScreen(): Boolean = sharedPreferences.getBoolean(KEY_OF_ONBOARDING_SHOWING_STATE, true)
 
-    fun isLoggedIn(): Boolean = sharedPreferences.getBoolean(KEY_OF_LOGGED_IN_STATE, true)
+    fun isLoggedIn(): Boolean = sharedPreferences.getBoolean(KEY_OF_LOGGED_IN_STATE, false)
 
     companion object {
         private const val KEY_OF_SHARED_PREF = "MySharedPref"
