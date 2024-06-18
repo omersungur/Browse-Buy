@@ -138,7 +138,7 @@ fun SignInScreen(
                     onNext = {
                         localFocusManager.moveFocus(FocusDirection.Down)
                     },
-                )
+                ),
             ) {
                 email = it
             }

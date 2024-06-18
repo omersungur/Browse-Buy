@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":compose-ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":feature:home"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
