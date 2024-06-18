@@ -1,5 +1,6 @@
 package com.omersungur.auth.navigation
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -11,7 +12,10 @@ import com.omersungur.auth.sign_in.SignInScreen
 import com.omersungur.auth.sign_up.SignUpScreen
 
 @Composable
-fun AuthenticationNavGraph(navController: NavHostController) {
+fun AuthenticationNavGraph(
+    navController: NavHostController,
+    goToTheActivity: (activity: Activity) -> Unit,
+) {
     NavHost(
         navController = navController,
         startDestination = AuthenticationScreens.SignInScreen,
@@ -25,7 +29,10 @@ fun AuthenticationNavGraph(navController: NavHostController) {
         }
 
         composable<AuthenticationScreens.SignUpScreen> {
-            SignUpScreen(navController = navController)
+            SignUpScreen(
+                navController = navController,
+                goToTheActivity = goToTheActivity,
+            )
         }
 
         composable<AuthenticationScreens.ForgotPasswordScreen> {

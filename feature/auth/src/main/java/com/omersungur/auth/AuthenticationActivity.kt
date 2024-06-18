@@ -12,7 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.omersungur.auth.navigation.AuthenticationNavGraph
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
+import com.omersungur.domain.util.goToTheActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuthenticationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +27,9 @@ class AuthenticationActivity : ComponentActivity() {
             BrowseAndBuyAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
-                        AuthenticationNavGraph(navController = navController)
+                        AuthenticationNavGraph(navController = navController) {
+                            goToTheActivity(activityToGo = it, isFinish = true)
+                        }
                     }
                 }
             }
