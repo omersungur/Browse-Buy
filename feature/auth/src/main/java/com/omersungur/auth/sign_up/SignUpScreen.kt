@@ -14,11 +14,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +35,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,12 +66,15 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
     goToTheActivity: (activity: Activity) -> Unit,
 ) {
+    val localFocusManager = LocalFocusManager.current
     val verticalScroll = rememberScrollState()
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var rePassword by remember { mutableStateOf("") }
+    var isPasswordShowing by remember { mutableStateOf(false) }
+    var visualTransformation: VisualTransformation by remember { mutableStateOf(PasswordVisualTransformation()) }
 
     with(uiState) {
         if (isLoading) {
@@ -102,38 +117,20 @@ fun SignUpScreen(
                 fontWeight = FontWeight.Bold,
             )
 
-            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
-
-            BBGoogleAuthButton(
-                title = stringResource(R.string.sign_up_with_google),
-                contentDescription = stringResource(id = R.string.google_logo),
-            ) {
-                // sonar - comment
-            }
-
-            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                HorizontalDivider(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = stringResource(R.string.or_sign_up_with),
-                    modifier = Modifier.padding(horizontal = Dimen.spacing_m1),
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
-                )
-
-                HorizontalDivider(modifier = Modifier.weight(1f))
-            }
-
             Spacer(modifier = Modifier.height(Dimen.spacing_l))
 
             BBOutlinedTextField(
                 textFieldValue = stringResource(id = R.string.email_address),
                 textFieldHint = stringResource(id = R.string.example_gmail_com),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        localFocusManager.moveFocus(FocusDirection.Down)
+                    },
+                ),
             ) {
                 email = it
             }
@@ -144,8 +141,37 @@ fun SignUpScreen(
                 textFieldValue = stringResource(id = R.string.password),
                 textFieldHint = null,
                 trailingIconContent = {
+                    if (!isPasswordShowing) {
+                        Icon(
+                            modifier = Modifier.clickable {
+                                isPasswordShowing = !isPasswordShowing
+                                visualTransformation = VisualTransformation.None
 
+                            },
+                            imageVector = Icons.Filled.VisibilityOff,
+                            contentDescription = stringResource(R.string.password_is_not_visible),
+                        )
+                    } else {
+                        Icon(
+                            modifier = Modifier.clickable {
+                                isPasswordShowing = !isPasswordShowing
+                                visualTransformation = PasswordVisualTransformation()
+                            },
+                            imageVector = Icons.Filled.Visibility,
+                            contentDescription = stringResource(R.string.password_is_visible),
+                        )
+                    }
                 },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        localFocusManager.moveFocus(FocusDirection.Down)
+                    },
+                ),
+                visualTransformation = visualTransformation,
             ) {
                 password = it
             }
@@ -156,8 +182,37 @@ fun SignUpScreen(
                 textFieldValue = stringResource(R.string.confirm_password),
                 textFieldHint = null,
                 trailingIconContent = {
+                    if (!isPasswordShowing) {
+                        Icon(
+                            modifier = Modifier.clickable {
+                                isPasswordShowing = !isPasswordShowing
+                                visualTransformation = VisualTransformation.None
 
+                            },
+                            imageVector = Icons.Filled.VisibilityOff,
+                            contentDescription = stringResource(R.string.password_is_not_visible),
+                        )
+                    } else {
+                        Icon(
+                            modifier = Modifier.clickable {
+                                isPasswordShowing = !isPasswordShowing
+                                visualTransformation = PasswordVisualTransformation()
+                            },
+                            imageVector = Icons.Filled.Visibility,
+                            contentDescription = stringResource(R.string.password_is_visible),
+                        )
+                    }
                 },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        localFocusManager.moveFocus(FocusDirection.Down)
+                    },
+                ),
+                visualTransformation = visualTransformation,
             ) {
                 rePassword = it
             }
@@ -191,6 +246,33 @@ fun SignUpScreen(
                     },
                     color = Color.C_3347C4,
                 )
+            }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = stringResource(R.string.or),
+                    modifier = Modifier.padding(horizontal = Dimen.spacing_m1),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
+                )
+
+                HorizontalDivider(modifier = Modifier.weight(1f))
+            }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+
+            BBGoogleAuthButton(
+                title = stringResource(R.string.sign_up_with_google),
+                contentDescription = stringResource(id = R.string.google_logo),
+            ) {
+                // sonar - comment
             }
         }
     }
