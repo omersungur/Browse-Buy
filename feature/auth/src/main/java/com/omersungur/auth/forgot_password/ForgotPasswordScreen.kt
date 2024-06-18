@@ -1,5 +1,6 @@
 package com.omersungur.auth.forgot_password
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,19 +13,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.omersungur.auth.R
@@ -38,8 +43,32 @@ import com.omersungur.compose_ui.theme.C_77707F
 import com.omersungur.compose_ui.theme.Dimen
 
 @Composable
-fun ForgotPasswordScreenUI(navController: NavController) {
+fun ForgotPasswordScreenUI(
+    navController: NavController,
+    viewModel: ForgotPasswordViewModel = hiltViewModel(),
+) {
     var email by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    with(uiState) {
+        if (loadingState) {
+            CircularProgressIndicator()
+            return@with
+        }
+
+        if (isHaveError) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            viewModel.updateErrorStateWithDefaultValue()
+            return@with
+        }
+
+        if (isSuccess) {
+            Toast.makeText(context, "Your password has been reset", Toast.LENGTH_LONG).show()
+            viewModel.updateSuccessStateWithDefaultValue()
+            navController.popBackStack()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -86,7 +115,7 @@ fun ForgotPasswordScreenUI(navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color.C_1443C3),
             onClick = {
-
+                viewModel.resetPassword(email)
             },
         ) {
             Text(text = stringResource(R.string.submit))

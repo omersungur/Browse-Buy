@@ -1,5 +1,7 @@
 package com.omersungur.auth.sign_up
 
+import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +17,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,13 +30,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.omersungur.auth.R
@@ -46,125 +51,147 @@ import com.omersungur.compose_ui.theme.Dimen
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    viewModel: SignUpViewModel = hiltViewModel(),
+    goToTheActivity: (activity: Activity) -> Unit,
 ) {
     val verticalScroll = rememberScrollState()
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var rePassword by remember { mutableStateOf("") }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = Dimen.spacing_m1)
-            .verticalScroll(verticalScroll),
-    ) {
-        Spacer(modifier = Modifier.padding(top = 75.dp))
-
-        Image(
-            modifier = Modifier.padding(horizontal = Dimen.spacing_xxxl),
-            painter = painterResource(id = R.drawable.turkcell_logo),
-            contentDescription = stringResource(id = R.string.turkcell_logo),
-        )
-
-        Spacer(modifier = Modifier.height(Dimen.spacing_xl))
-
-        Text(
-            text = stringResource(R.string.browse_buy),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            fontSize = Dimen.font_size_l1,
-            fontWeight = FontWeight.Bold,
-        )
-
-        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
-
-        BBGoogleAuthButton(
-            title = stringResource(R.string.sign_up_with_google),
-            contentDescription = stringResource(id = R.string.google_logo),
-        ) {
-            // sonar - comment
+    with(uiState) {
+        if (isLoading) {
+            CircularProgressIndicator()
+            return@with
         }
 
-        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+        if (isHaveError) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            viewModel.updateStatesWithDefaultValues()
+        }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+        if (isSuccessSignUpWithEmailAndPassword) {
+            Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
+            viewModel.updateStatesWithDefaultValues()
+            // goToTheActivity(HomeActivity())
+        }
+
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = Dimen.spacing_m1)
+                .verticalScroll(verticalScroll),
         ) {
-            HorizontalDivider(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.padding(top = 75.dp))
+
+            Image(
+                modifier = Modifier.padding(horizontal = Dimen.spacing_xxxl),
+                painter = painterResource(id = R.drawable.turkcell_logo),
+                contentDescription = stringResource(id = R.string.turkcell_logo),
+            )
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_xl))
 
             Text(
-                text = stringResource(R.string.or_sign_up_with),
-                modifier = Modifier.padding(horizontal = Dimen.spacing_m1),
+                text = stringResource(R.string.browse_buy),
+                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
+                fontSize = Dimen.font_size_l1,
+                fontWeight = FontWeight.Bold,
             )
 
-            HorizontalDivider(modifier = Modifier.weight(1f))
-        }
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
-        Spacer(modifier = Modifier.height(Dimen.spacing_l))
+            BBGoogleAuthButton(
+                title = stringResource(R.string.sign_up_with_google),
+                contentDescription = stringResource(id = R.string.google_logo),
+            ) {
+                // sonar - comment
+            }
 
-        BBOutlinedTextField(
-            textFieldValue = stringResource(id = R.string.email_address),
-            textFieldHint = stringResource(id = R.string.example_gmail_com),
-        ) {
-            email = it
-        }
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
-        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f))
 
-        BBOutlinedTextField(
-            textFieldValue = stringResource(id = R.string.password),
-            textFieldHint = null,
-            trailingIconContent = {
+                Text(
+                    text = stringResource(R.string.or_sign_up_with),
+                    modifier = Modifier.padding(horizontal = Dimen.spacing_m1),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
+                )
 
-            },
-        ) {
-            password = it
-        }
+                HorizontalDivider(modifier = Modifier.weight(1f))
+            }
 
-        Spacer(modifier = Modifier.height(Dimen.spacing_xs))
+            Spacer(modifier = Modifier.height(Dimen.spacing_l))
 
-        BBOutlinedTextField(
-            textFieldValue = stringResource(R.string.confirm_password),
-            textFieldHint = null,
-            trailingIconContent = {
+            BBOutlinedTextField(
+                textFieldValue = stringResource(id = R.string.email_address),
+                textFieldHint = stringResource(id = R.string.example_gmail_com),
+            ) {
+                email = it
+            }
 
-            },
-        ) {
-            rePassword = it
-        }
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
-        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+            BBOutlinedTextField(
+                textFieldValue = stringResource(id = R.string.password),
+                textFieldHint = null,
+                trailingIconContent = {
 
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.C_3347C4),
-            onClick = {
-                // TODO: Sign Up
-            },
-        ) {
-            Text(text = stringResource(R.string.sign_up))
-        }
-
-        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            Text(text = stringResource(R.string.already_have_an_account))
-
-            Spacer(modifier = Modifier.width(Dimen.spacing_xxs))
-
-            Text(
-                text = stringResource(id = R.string.login),
-                modifier = Modifier.clickable {
-                    navController.popBackStack()
                 },
-                color = Color.C_3347C4,
-            )
+            ) {
+                password = it
+            }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_xs))
+
+            BBOutlinedTextField(
+                textFieldValue = stringResource(R.string.confirm_password),
+                textFieldHint = null,
+                trailingIconContent = {
+
+                },
+            ) {
+                rePassword = it
+            }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.C_3347C4),
+                onClick = {
+                    viewModel.signUpWithEmailAndPassword(email, password)
+                },
+            ) {
+                Text(text = stringResource(R.string.sign_up))
+            }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(text = stringResource(R.string.already_have_an_account))
+
+                Spacer(modifier = Modifier.width(Dimen.spacing_xxs))
+
+                Text(
+                    text = stringResource(id = R.string.login),
+                    modifier = Modifier.clickable {
+                        navController.popBackStack()
+                    },
+                    color = Color.C_3347C4,
+                )
+            }
         }
     }
 }
@@ -173,6 +200,8 @@ fun SignUpScreen(
 @Composable
 private fun SignUpScreenPreview() {
     BrowseAndBuyAppTheme {
-        SignUpScreen(navController = rememberNavController())
+        SignUpScreen(navController = rememberNavController()) {
+            // sonar - comment
+        }
     }
 }
