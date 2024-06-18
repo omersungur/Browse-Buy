@@ -25,7 +25,10 @@ fun AuthenticationNavGraph(
         popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(500)) },
     ) {
         composable<AuthenticationScreens.SignInScreen> {
-            SignInScreen(navController = navController)
+            SignInScreen(
+                navController = navController,
+                goToTheActivity = goToTheActivity,
+            )
         }
 
         composable<AuthenticationScreens.SignUpScreen> {
