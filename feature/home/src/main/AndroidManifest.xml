@@ -4,6 +4,7 @@
     <application>
         <activity
             android:name=".HomeActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="false" />
     </application>
 
