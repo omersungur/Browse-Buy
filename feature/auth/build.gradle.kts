@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -69,4 +71,11 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.navigation.compose.hilt)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.perf)
 }
