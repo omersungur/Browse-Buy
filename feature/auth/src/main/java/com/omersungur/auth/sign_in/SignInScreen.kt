@@ -1,5 +1,6 @@
 package com.omersungur.auth.sign_in
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,12 +62,14 @@ import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.compose_ui.theme.C_3347C4
 import com.omersungur.compose_ui.theme.Dimen
 import com.omersungur.domain.model.JWTUser
+import com.omersungur.home.HomeActivity
 
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: SignInViewModel = hiltViewModel(),
+    goToTheActivity: (activity: Activity) -> Unit,
 ) {
     val localFocusManager = LocalFocusManager.current
     val uiState by viewModel.uiState.collectAsState()
@@ -86,14 +89,12 @@ fun SignInScreen(
 
         if (isSuccessEmailAndPasswordLogin) {
             Toast.makeText(LocalContext.current, "Login Success", Toast.LENGTH_SHORT).show()
+            goToTheActivity(HomeActivity())
         }
 
         if (isSuccessJWTLogin) {
             Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
-            jwtData?.let {
-                println(it.firstName)
-            }
-            viewModel.updateErrorStatesWithDefaultValues()
+            goToTheActivity(HomeActivity())
         }
 
         if (isHaveError) {
@@ -285,6 +286,8 @@ fun SignInScreen(
 @Composable
 private fun SignInScreenPreview() {
     BrowseAndBuyAppTheme {
-        SignInScreen(navController = rememberNavController())
+        SignInScreen(navController = rememberNavController()) {
+            // sonar - comment
+        }
     }
 }

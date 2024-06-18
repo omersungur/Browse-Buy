@@ -58,6 +58,7 @@ import com.omersungur.compose_ui.component.text_field.BBOutlinedTextField
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.compose_ui.theme.C_3347C4
 import com.omersungur.compose_ui.theme.Dimen
+import com.omersungur.home.HomeActivity
 
 @Composable
 fun SignUpScreen(
@@ -90,7 +91,7 @@ fun SignUpScreen(
         if (isSuccessSignUpWithEmailAndPassword) {
             Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
             viewModel.updateStatesWithDefaultValues()
-            // goToTheActivity(HomeActivity())
+            goToTheActivity(HomeActivity())
         }
 
         Column(
