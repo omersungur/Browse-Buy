@@ -2,6 +2,9 @@ package com.omersungur.auth.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.omersungur.domain.model.JWTData
+import com.omersungur.domain.model.JWTUser
+import com.omersungur.domain.repository.auth.JWTAuthRepository
 import com.omersungur.domain.use_cases.auth.login.LoginUseCase
 import com.omersungur.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
+    private val jwtAuthRepository: JWTAuthRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginScreenUIState())
@@ -22,6 +26,39 @@ class SignInViewModel @Inject constructor(
 
     fun loginWithGoogle() {
         //TODO: Implement login with Google
+    }
+
+    fun loginWithJWT(jwtUser: JWTUser) {
+        jwtAuthRepository.login(jwtUser).onEach {
+            when(it) {
+                is Resource.Loading -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = true,
+                            isSuccessJWTLogin = false,
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            isSuccessJWTLogin = true,
+                            jwtData = it.data,
+                        )
+                    }
+                }
+                is Resource.Error -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            isHaveError = true,
+                            errorMessage = it.errorMessage.orEmpty()
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun loginWithEmailAndPassword(email: String, password: String) {
@@ -62,7 +99,7 @@ class SignInViewModel @Inject constructor(
                             state.copy(
                                 isLoading = false,
                                 isHaveError = true,
-                                errorMessage = it.errorMessage ?: "",
+                                errorMessage = it.errorMessage.orEmpty(),
                             )
                         }
                     }
@@ -84,6 +121,8 @@ class SignInViewModel @Inject constructor(
         var isLoading: Boolean = false,
         val isHaveError: Boolean = false,
         val errorMessage: String = "",
+        val jwtData: JWTData? = null,
+        val isSuccessJWTLogin: Boolean = false,
         val isSuccessGoogleLogin: Boolean = false,
         val isSuccessEmailAndPasswordLogin: Boolean = false,
         val isLoggedIn: Boolean = false,

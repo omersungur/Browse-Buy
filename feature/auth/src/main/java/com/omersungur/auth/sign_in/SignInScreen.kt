@@ -1,6 +1,5 @@
 package com.omersungur.auth.sign_in
 
-import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -60,6 +60,7 @@ import com.omersungur.compose_ui.component.text_field.BBOutlinedTextField
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.compose_ui.theme.C_3347C4
 import com.omersungur.compose_ui.theme.Dimen
+import com.omersungur.domain.model.JWTUser
 
 @Composable
 fun SignInScreen(
@@ -73,17 +74,31 @@ fun SignInScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordShowing by remember { mutableStateOf(false) }
+    var checkedJWTLogin by remember { mutableStateOf(false) }
+    var checkedRememberMe by remember { mutableStateOf(false) }
     var visualTransformation: VisualTransformation by remember { mutableStateOf(PasswordVisualTransformation()) }
 
     with(uiState) {
-        if(isLoading) {
+        if (isLoading) {
             CircularProgressIndicator()
             return@with
         }
 
         if (isSuccessEmailAndPasswordLogin) {
             Toast.makeText(LocalContext.current, "Login Success", Toast.LENGTH_SHORT).show()
-            return@with
+        }
+
+        if (isSuccessJWTLogin) {
+            Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
+            jwtData?.let {
+                println(it.firstName)
+            }
+            viewModel.updateErrorStatesWithDefaultValues()
+        }
+
+        if (isHaveError) {
+            Toast.makeText(LocalContext.current, errorMessage, Toast.LENGTH_SHORT).show()
+            viewModel.updateErrorStatesWithDefaultValues()
         }
 
         Column(
@@ -110,39 +125,11 @@ fun SignInScreen(
                 fontWeight = FontWeight.Bold,
             )
 
-            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
-
-            BBGoogleAuthButton(
-                modifier = Modifier.background(MaterialTheme.colorScheme.onPrimary),
-                title = stringResource(R.string.sign_in_with_google),
-                contentDescription = stringResource(R.string.google_logo),
-            ) {
-
-            }
-
-            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                HorizontalDivider(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = "or sign in with",
-                    modifier = Modifier.padding(horizontal = Dimen.spacing_m1),
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
-                )
-
-                HorizontalDivider(modifier = Modifier.weight(1f))
-            }
-
             Spacer(modifier = Modifier.height(Dimen.spacing_l))
 
             BBOutlinedTextField(
-                textFieldValue = stringResource(R.string.email_address),
-                textFieldHint = stringResource(R.string.example_gmail_com),
+                textFieldValue = if (!checkedJWTLogin) stringResource(R.string.email_address) else "Username",
+                textFieldHint = if (!checkedJWTLogin) stringResource(R.string.example_gmail_com) else null,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
@@ -206,16 +193,41 @@ fun SignInScreen(
                 password = it
             }
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = checkedJWTLogin, onCheckedChange = { checkedJWTLogin = !checkedJWTLogin })
+
+                    Text(text = stringResource(R.string.login_with_jwt))
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = checkedRememberMe, onCheckedChange = { checkedRememberMe = !checkedRememberMe })
+
+                    Text(text = stringResource(R.string.remember_me))
+                }
+            }
+
             Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.C_3347C4),
                 onClick = {
-                    viewModel.loginWithEmailAndPassword(email, password)
+                    if (checkedJWTLogin) {
+                        val jwtUser = JWTUser(email, password)
+                        viewModel.loginWithJWT(jwtUser)
+                    } else {
+                        viewModel.loginWithEmailAndPassword(email, password)
+                    }
                 },
             ) {
-                Text(text = stringResource(R.string.login))
+                Text(
+                    text = stringResource(R.string.login),
+                    color = Color.White,
+                )
             }
 
             Spacer(modifier = Modifier.height(Dimen.spacing_m1))
@@ -236,15 +248,40 @@ fun SignInScreen(
                     color = Color.C_3347C4,
                 )
             }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_m2))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = stringResource(R.string.or),
+                    modifier = Modifier.padding(horizontal = Dimen.spacing_m1),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.9f),
+                )
+
+                HorizontalDivider(modifier = Modifier.weight(1f))
+            }
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_m1))
+
+            BBGoogleAuthButton(
+                modifier = Modifier.background(MaterialTheme.colorScheme.onPrimary),
+                title = stringResource(R.string.sign_in_with_google),
+                contentDescription = stringResource(R.string.google_logo),
+            ) {
+                // TODO: Login with Google
+            }
         }
     }
 }
 
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-)
+@Preview(showBackground = true)
 @Composable
 private fun SignInScreenPreview() {
     BrowseAndBuyAppTheme {
