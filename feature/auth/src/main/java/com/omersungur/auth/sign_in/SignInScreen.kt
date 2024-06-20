@@ -61,7 +61,7 @@ import com.omersungur.compose_ui.component.text_field.BBOutlinedTextField
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.compose_ui.theme.C_3347C4
 import com.omersungur.compose_ui.theme.Dimen
-import com.omersungur.domain.model.JWTUser
+import com.omersungur.domain.model.jwt_user.JWTUser
 import com.omersungur.home.HomeActivity
 
 @Composable

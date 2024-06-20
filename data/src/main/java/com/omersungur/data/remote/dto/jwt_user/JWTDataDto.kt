@@ -1,6 +1,6 @@
-package com.omersungur.domain.model
+package com.omersungur.data.remote.dto.jwt_user
 
-data class JWTData (
+data class JWTDataDto (
     val id: Long?,
     val username: String?,
     val email: String?,

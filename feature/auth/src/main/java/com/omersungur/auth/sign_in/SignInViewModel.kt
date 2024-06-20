@@ -2,8 +2,8 @@ package com.omersungur.auth.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.omersungur.domain.model.JWTData
-import com.omersungur.domain.model.JWTUser
+import com.omersungur.domain.model.jwt_user.JWTData
+import com.omersungur.domain.model.jwt_user.JWTUser
 import com.omersungur.domain.repository.auth.JWTAuthRepository
 import com.omersungur.domain.use_cases.auth.login.LoginUseCase
 import com.omersungur.domain.util.Resource

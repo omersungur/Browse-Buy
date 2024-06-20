@@ -1,7 +1,7 @@
 package com.omersungur.data.mapper
 
-import com.omersungur.data.remote.dto.JWTUserDto
-import com.omersungur.domain.model.JWTUser
+import com.omersungur.data.remote.dto.jwt_user.JWTUserDto
+import com.omersungur.domain.model.jwt_user.JWTUser
 
 fun JWTUserDto.toJWTUser(): JWTUser {
     return JWTUser(

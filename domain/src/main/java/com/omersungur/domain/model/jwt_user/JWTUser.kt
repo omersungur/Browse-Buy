@@ -1,4 +1,4 @@
-package com.omersungur.domain.model
+package com.omersungur.domain.model.jwt_user
 
 data class JWTUser(
     val username : String?,

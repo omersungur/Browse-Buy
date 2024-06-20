@@ -1,4 +1,4 @@
-package com.omersungur.data.remote.dto
+package com.omersungur.data.remote.dto.jwt_user
 
 data class JWTUserDto(
     val username : String?,

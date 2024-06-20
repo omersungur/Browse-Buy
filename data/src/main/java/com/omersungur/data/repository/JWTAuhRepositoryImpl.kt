@@ -3,8 +3,8 @@ package com.omersungur.data.repository
 import com.omersungur.data.mapper.toJWTData
 import com.omersungur.data.mapper.toJWTUserDto
 import com.omersungur.data.remote.ProductApi
-import com.omersungur.domain.model.JWTData
-import com.omersungur.domain.model.JWTUser
+import com.omersungur.domain.model.jwt_user.JWTData
+import com.omersungur.domain.model.jwt_user.JWTUser
 import com.omersungur.domain.repository.auth.JWTAuthRepository
 import com.omersungur.domain.util.Resource
 import kotlinx.coroutines.flow.Flow

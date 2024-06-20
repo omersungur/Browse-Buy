@@ -1,7 +1,7 @@
 package com.omersungur.data.remote
 
-import com.omersungur.data.remote.dto.JWTDataDto
-import com.omersungur.data.remote.dto.JWTUserDto
+import com.omersungur.data.remote.dto.jwt_user.JWTDataDto
+import com.omersungur.data.remote.dto.jwt_user.JWTUserDto
 import retrofit2.http.Body
 import retrofit2.http.POST
 
