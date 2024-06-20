@@ -28,13 +28,15 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-
         viewBinding = true
     }
 }
 
 dependencies {
     implementation(project(":feature:favorite"))
+    implementation(project(":feature:category"))
+    implementation(project(":feature:cart"))
+    implementation(project(":feature:search"))
     implementation(project(":compose-ui"))
     implementation(project(":data"))
 
