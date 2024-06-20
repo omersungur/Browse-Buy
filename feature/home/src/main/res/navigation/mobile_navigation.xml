@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.omersungur.home.ui.profile.ProfileFragment"
+        android:name="com.omersungur.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment

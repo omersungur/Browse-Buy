@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":feature:category"))
     implementation(project(":feature:cart"))
     implementation(project(":feature:search"))
+    implementation(project(":feature:profile"))
     implementation(project(":compose-ui"))
     implementation(project(":data"))
 
