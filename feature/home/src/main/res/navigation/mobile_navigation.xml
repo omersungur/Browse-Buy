@@ -6,28 +6,14 @@
     app:startDestination="@id/nav_home">
 
     <fragment
-        android:id="@+id/nav_search"
-        android:name="com.omersungur.home.ui.search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
-    <fragment
         android:id="@+id/nav_home"
         android:name="com.omersungur.home.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/nav_cart"
-        android:name="com.omersungur.home.ui.cart.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
-    <fragment
-        android:id="@+id/nav_category"
-        android:name="com.omersungur.home.ui.category.CategoryFragment"
-        android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+
     <fragment
         android:id="@+id/nav_favorite"
-        android:name="com.omersungur.home.ui.favorite.FavoriteFragment"
+        android:name="com.omersungur.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
@@ -35,4 +21,17 @@
         android:name="com.omersungur.home.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/nav_category"
+        android:name="com.omersungur.category.CategoryFragment"
+        android:label="CategoryFragment" />
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.omersungur.cart.CartFragment"
+        android:label="CartFragment" />
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.omersungur.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

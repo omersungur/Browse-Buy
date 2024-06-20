@@ -1,6 +1,5 @@
-package com.omersungur.home.ui.category
+package com.omersungur.category
 
 import androidx.fragment.app.Fragment
-import com.omersungur.home.R
 
 class CategoryFragment : Fragment(R.layout.fragment_category)
