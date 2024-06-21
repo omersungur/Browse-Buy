@@ -4,6 +4,7 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.omersungur.data.remote.ProductApi
+import com.omersungur.data.util.NetworkConstants
 import com.omersungur.data.util.NetworkConstants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -12,6 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -29,6 +31,7 @@ object NetworkModule {
         .client(okHttpClient)
         .addConverterFactory(gsonConverterFactory)
         .build()
+
 
     @Singleton
     @Provides
