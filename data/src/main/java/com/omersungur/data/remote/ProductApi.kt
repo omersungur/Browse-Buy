@@ -1,5 +1,6 @@
 package com.omersungur.data.remote
 
+import com.omersungur.data.remote.dto.category.CategoryDto
 import com.omersungur.data.remote.dto.jwt_user.JWTDataDto
 import com.omersungur.data.remote.dto.jwt_user.JWTUserDto
 import com.omersungur.data.remote.dto.product.ProductDto
@@ -14,4 +15,7 @@ interface ProductApi {
 
     @GET("products")
     suspend fun getProducts(): ProductDto
+
+    @GET("products/categories")
+    suspend fun getCategories(): List<CategoryDto>
 }
