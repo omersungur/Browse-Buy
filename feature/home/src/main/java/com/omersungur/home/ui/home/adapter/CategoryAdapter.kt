@@ -3,9 +3,12 @@ package com.omersungur.home.ui.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.omersungur.domain.model.category.Category
 import com.omersungur.home.databinding.RowCategoryBinding
 
-class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryAdapter(
+    private val categories: List<Category>,
+): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     class CategoryViewHolder(val binding: RowCategoryBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -15,10 +18,12 @@ class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+        val category = categories[position]
 
+        holder.binding.btnCategory.text = category.name
     }
 
     override fun getItemCount(): Int {
-        return 0
+        return categories.size
     }
 }
