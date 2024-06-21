@@ -2,6 +2,7 @@ package com.omersungur.home.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.omersungur.domain.model.category.Category
 import com.omersungur.domain.model.product.ProductX
 import com.omersungur.domain.repository.product.ProductRepository
 import com.omersungur.domain.util.Resource
@@ -24,6 +25,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getProducts()
+        getCategories()
     }
 
     private fun getProducts() = productRepository.getProducts().onEach { result ->
@@ -57,11 +59,43 @@ class HomeViewModel @Inject constructor(
         }
     }.launchIn(viewModelScope)
 
+    private fun getCategories() = productRepository.getCategories().onEach { result ->
+        when (result) {
+            is Resource.Loading -> {
+                _uiState.update { state ->
+                    state.copy(loadingState = true)
+                }
+            }
+
+            is Resource.Success -> {
+                _uiState.update { state ->
+                    state.copy(
+                        loadingState = false,
+                        isHaveError = false,
+                        isSuccess = true,
+                        categories = result.data ?: emptyList()
+                    )
+                }
+            }
+
+            is Resource.Error -> {
+                _uiState.update { state ->
+                    state.copy(
+                        loadingState = false,
+                        isHaveError = true,
+                        errorMessage = result.errorMessage.orEmpty()
+                    )
+                }
+            }
+        }
+    }.launchIn(viewModelScope)
+
     data class HomeUIState(
         val loadingState: Boolean = false,
         val isHaveError: Boolean = false,
         val isSuccess: Boolean = false,
         val errorMessage: String = "",
-        val products: List<ProductX> = emptyList()
+        val products: List<ProductX> = emptyList(),
+        val categories : List<Category> = emptyList()
     )
 }
