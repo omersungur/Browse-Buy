@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.omersungur.home.R
 import com.omersungur.home.databinding.FragmentHomeBinding
 import com.omersungur.home.ui.home.adapter.CategoryAdapter
+import com.omersungur.home.ui.home.adapter.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var productAdapter: ProductAdapter
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -40,9 +43,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     categoryAdapter = CategoryAdapter(state.categories)
                     binding.rvCategory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                     binding.rvCategory.adapter = categoryAdapter
-                    state.categories.forEach {
-                        println(it.name)
-                    }
+
+                    productAdapter = ProductAdapter(state.products)
+                    binding.rvProduct.layoutManager = GridLayoutManager(requireContext(), 2)
+                    binding.rvProduct.adapter = productAdapter
                 }
             }
         }
