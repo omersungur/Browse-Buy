@@ -59,4 +59,5 @@ dependencies {
     implementation(libs.material.v190)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.glide)
 }
