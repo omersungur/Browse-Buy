@@ -3,7 +3,7 @@ package com.omersungur.home.ui.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.omersungur.domain.model.product.Product
+import com.bumptech.glide.Glide
 import com.omersungur.domain.model.product.ProductX
 import com.omersungur.home.databinding.RowProductBinding
 
@@ -21,9 +21,10 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = products[position]
         holder.binding.apply {
-            tvPrice.text = product.price.toString()
+            tvPrice.text = "$${product.price}"
             tvTitle.text = product.title
             tvStarRating.text = product.rating.toString()
+            Glide.with(holder.itemView).load(product.thumbnail).into(ivProduct)
         }
     }
 
