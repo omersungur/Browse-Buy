@@ -17,6 +17,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.StarHalf
+import androidx.compose.material.icons.automirrored.outlined.StarHalf
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarHalf
+import androidx.compose.material.icons.filled.StarRate
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material.icons.sharp.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,11 +38,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,7 +59,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -79,7 +87,7 @@ class SearchFragment : Fragment() {
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var debounceJob by remember { mutableStateOf<Job?>(null) }
@@ -180,8 +188,41 @@ fun ProductColumn(
                     modifier = Modifier.fillMaxWidth(),
                     overflow = TextOverflow.Ellipsis,
                 )
+
+                RatingBar(rating = product.rating ?: 0.0)
             }
         }
     }
+}
+@Composable
+private fun RatingBar(
+    rating: Double,
+) {
+    if (rating < 2.0) {
+        Icon(
+            imageVector = Icons.Outlined.StarRate,
+            contentDescription = "Star",
+            tint = Color.Red
+        )
+    }
+    else if (rating < 4.0) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Outlined.StarHalf,
+            contentDescription = "Star",
+            tint = Color.Green
+        )
+    }
+    else {
+        Icon(
+            imageVector = Icons.Outlined.Star,
+            contentDescription = "Star",
+            tint = Color.Yellow
+        )
+    }
+}
 
+@Preview
+@Composable
+private fun RatingBarPreview() {
+    RatingBar(rating = 4.0)
 }
