@@ -8,18 +8,17 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.omersungur.home.ui.home.HomeFragment"
-        android:label="fragment_home"
+        android:label="Home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
         android:id="@+id/nav_favorite"
         android:name="com.omersungur.favorite.FavoriteFragment"
-        android:label="fragment_favorite"
+        android:label="Favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.omersungur.profile.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/nav_category"
@@ -28,10 +27,10 @@
     <fragment
         android:id="@+id/nav_cart"
         android:name="com.omersungur.cart.CartFragment"
-        android:label="CartFragment" />
+        android:label="Cart" />
     <fragment
         android:id="@+id/nav_search"
         android:name="com.omersungur.search.SearchFragment"
-        android:label="fragment_search"
+        android:label="Search"
         tools:layout="@layout/fragment_search" />
 </navigation>
