@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
         getCategories()
     }
 
-    private fun getProducts() = productRepository.getProducts().onEach { result ->
+    fun getProducts(query: String = "") = productRepository.getProducts().onEach { result ->
         when (result) {
             is Resource.Loading -> {
                 _uiState.update { state ->
@@ -42,7 +42,9 @@ class HomeViewModel @Inject constructor(
                         loadingState = false,
                         isHaveError = false,
                         isSuccess = true,
-                        products = result.data?.products ?: emptyList()
+                        products = result.data?.products?.filter {
+                            it.title?.contains(query, ignoreCase = true) ?: false
+                        } ?: emptyList()
                     )
                 }
             }
