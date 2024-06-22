@@ -32,7 +32,6 @@ android {
     buildFeatures {
         compose = true
     }
-
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.13"
     }
@@ -60,4 +59,5 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.androidx.material.icons.extended)
 }
