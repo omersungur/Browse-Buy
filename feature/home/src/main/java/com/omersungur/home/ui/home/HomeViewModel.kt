@@ -1,9 +1,12 @@
 package com.omersungur.home.ui.home
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.omersungur.domain.model.category.Category
+import com.omersungur.domain.model.favorite.FavoriteProduct
 import com.omersungur.domain.model.product.ProductX
+import com.omersungur.domain.repository.favorite.FavoriteProductRepository
 import com.omersungur.domain.repository.product.ProductRepository
 import com.omersungur.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,11 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val favoriteProductRepository: FavoriteProductRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState())
@@ -26,6 +31,7 @@ class HomeViewModel @Inject constructor(
     init {
         getProducts()
         getCategories()
+        getFavoriteProduct()
     }
 
     fun getProducts(query: String = "") = productRepository.getProducts().onEach { result ->
@@ -91,6 +97,28 @@ class HomeViewModel @Inject constructor(
             }
         }
     }.launchIn(viewModelScope)
+    
+    private fun getFavoriteProduct() = favoriteProductRepository.getFavoriteProduct().onEach { result ->
+        _uiState.update { state ->
+            state.copy(
+                isSuccess = true,
+                favoriteProducts = result
+            )
+        }
+    }.launchIn(viewModelScope)
+
+    fun insertFavoriteProduct(favoriteProduct: FavoriteProduct) = viewModelScope.launch {
+        favoriteProductRepository.insertFavoriteProduct(favoriteProduct)
+    }
+
+    fun deleteFavoriteProduct(favoriteProduct: FavoriteProduct) = viewModelScope.launch {
+        favoriteProductRepository.deleteFavoriteProduct(favoriteProduct)
+    }
+
+    fun isProductFavorite(productId: Int): Boolean {
+        return _uiState.value.favoriteProducts.any { it.id == productId }
+    }
+
 
     data class HomeUIState(
         val loadingState: Boolean = false,
@@ -98,6 +126,7 @@ class HomeViewModel @Inject constructor(
         val isSuccess: Boolean = false,
         val errorMessage: String = "",
         val products: List<ProductX> = emptyList(),
-        val categories : List<Category> = emptyList()
+        val categories : List<Category> = emptyList(),
+        val favoriteProducts : List<FavoriteProduct> = emptyList()
     )
 }

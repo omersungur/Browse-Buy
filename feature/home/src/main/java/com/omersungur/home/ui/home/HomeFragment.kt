@@ -22,7 +22,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.sharp.Search
@@ -32,6 +34,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -43,6 +46,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,6 +68,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.domain.model.category.Category
+import com.omersungur.domain.model.favorite.FavoriteProduct
 import com.omersungur.domain.model.product.ProductX
 import com.omersungur.home.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -203,12 +208,19 @@ fun HomeScreen(
             if (loadingState) {
                 CircularProgressIndicator()
             }
+
             if (isSuccess) {
                 CategoryLazyRow(categories = categories)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                ProductLazyColumn(products = products)
+                ProductLazyColumn(
+                    products = products,
+                    viewModel = viewModel,
+                    onAddToCartClicked = {
+
+                    },
+                )
             }
         }
     }
@@ -218,7 +230,7 @@ fun HomeScreen(
 fun CategoryRow(
     modifier: Modifier = Modifier,
     categoryName: String,
-    onCategoryClick: (String) -> Unit
+    onCategoryClick: (String) -> Unit,
 ) {
     Button(
         modifier = modifier,
@@ -250,14 +262,46 @@ fun CategoryLazyRow(
 fun ProductLazyColumn(
     modifier: Modifier = Modifier,
     products: List<ProductX>,
+    viewModel: HomeViewModel,
+    onAddToCartClicked: () -> Unit,
 ) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        items(products) { item ->
-            ProductCard(product = item)
+        items(products) { product ->
+            val isFavorite = viewModel.isProductFavorite(product.id ?: -1)
+
+            ProductCard(
+                product = product,
+                isFavorite = isFavorite,
+                onFavoriteClick = {
+                    if (isFavorite) {
+                        viewModel.deleteFavoriteProduct(
+                            FavoriteProduct(
+                                id = product.id ?: -1,
+                                name = product.title.orEmpty(),
+                                imageUrl = product.thumbnail.orEmpty(),
+                                brand = product.brand.orEmpty(),
+                                rating = product.rating ?: 0.0
+                            )
+                        )
+                    } else {
+                        viewModel.insertFavoriteProduct(
+                            FavoriteProduct(
+                                id = product.id ?: -1,
+                                name = product.title.orEmpty(),
+                                imageUrl = product.thumbnail.orEmpty(),
+                                brand = product.brand.orEmpty(),
+                                rating = product.rating ?: 0.0
+                            )
+                        )
+                    }
+
+                },
+                onAddToCartClicked = onAddToCartClicked,
+            )
         }
     }
 }
@@ -266,7 +310,9 @@ fun ProductLazyColumn(
 fun ProductCard(
     modifier: Modifier = Modifier,
     product: ProductX,
-    onAddToCartClicked: () -> Unit = {},
+    isFavorite: Boolean,
+    onFavoriteClick: () -> Unit,
+    onAddToCartClicked: () -> Unit,
 ) {
     val formattedRating = String.format(locale = Locale.getDefault(), "%.1f", product.rating)
 
@@ -284,18 +330,23 @@ fun ProductCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(horizontal = 8.dp),
             ) {
 
-                Icon(
-                    imageVector = Icons.Outlined.Favorite,
-                    contentDescription = "Favorite Icon",
-                    tint = Color.Red,
-                )
+                IconButton(onClick = onFavoriteClick) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorite Icon",
+                        tint = Color.Red,
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
 
                 AsyncImage(
                     modifier = Modifier
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .align(Alignment.CenterVertically),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(product.thumbnail)
                         .crossfade(true)
@@ -304,6 +355,8 @@ fun ProductCard(
                     contentDescription = product.title,
                     contentScale = ContentScale.Fit,
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
             }
 
             Text(
@@ -330,7 +383,9 @@ fun ProductCard(
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
