@@ -5,10 +5,12 @@ import com.omersungur.data.local.favorite.FavoriteDao
 import com.omersungur.data.remote.ProductApi
 import com.omersungur.data.repository.FirebaseAuthenticationRepositoryImpl
 import com.omersungur.data.repository.JWTAuhRepositoryImpl
+import com.omersungur.data.repository.cart.CartRepositoryImpl
 import com.omersungur.data.repository.favorite.FavoriteProductRepositoryImpl
 import com.omersungur.data.repository.product.ProductRepositoryImpl
 import com.omersungur.domain.repository.auth.FirebaseAuthenticationRepository
 import com.omersungur.domain.repository.auth.JWTAuthRepository
+import com.omersungur.domain.repository.cart.CartRepository
 import com.omersungur.domain.repository.favorite.FavoriteProductRepository
 import com.omersungur.domain.repository.product.ProductRepository
 import dagger.Module
@@ -44,4 +46,10 @@ object RepositoryModule {
     fun provideFavoriteProductRepository(
         favoriteDao: FavoriteDao
     ): FavoriteProductRepository = FavoriteProductRepositoryImpl(favoriteDao)
+
+    @Provides
+    @Singleton
+    fun provideCartRepository(
+        productApi: ProductApi
+    ): CartRepository = CartRepositoryImpl(productApi)
 }
