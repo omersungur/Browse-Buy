@@ -5,6 +5,7 @@ import com.omersungur.data.remote.dto.category.CategoryDto
 import com.omersungur.data.remote.dto.jwt_user.JWTDataDto
 import com.omersungur.data.remote.dto.jwt_user.JWTUserDto
 import com.omersungur.data.remote.dto.product.ProductDto
+import com.omersungur.data.remote.dto.user.UserDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -26,4 +27,7 @@ interface ProductApi {
 
     @GET("products/category/{categoryName}")
     suspend fun getProductsByCategory(@Path("categoryName") categoryName: String): ProductDto
+
+    @GET("users/{userId}")
+    suspend fun getUserInfo(@Path("userId") userId: Int): UserDto
 }
