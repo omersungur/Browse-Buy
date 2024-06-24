@@ -34,4 +34,14 @@ class ProductRepositoryImpl @Inject constructor(
             emit(Resource.Error(ex.message.toString()))
         }
     }
+
+    override fun getProductsByCategory(categoryName: String): Flow<Resource<Product>> = flow {
+        try {
+            emit(Resource.Loading())
+            val categories = productApi.getProductsByCategory(categoryName)
+            emit(Resource.Success(categories.toProduct()))
+        } catch (ex: Exception) {
+            emit(Resource.Error(ex.message.toString()))
+        }
+    }
 }
