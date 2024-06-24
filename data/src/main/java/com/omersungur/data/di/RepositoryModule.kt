@@ -8,11 +8,13 @@ import com.omersungur.data.repository.JWTAuhRepositoryImpl
 import com.omersungur.data.repository.cart.CartRepositoryImpl
 import com.omersungur.data.repository.favorite.FavoriteProductRepositoryImpl
 import com.omersungur.data.repository.product.ProductRepositoryImpl
+import com.omersungur.data.repository.user.UserRepositoryImpl
 import com.omersungur.domain.repository.auth.FirebaseAuthenticationRepository
 import com.omersungur.domain.repository.auth.JWTAuthRepository
 import com.omersungur.domain.repository.cart.CartRepository
 import com.omersungur.domain.repository.favorite.FavoriteProductRepository
 import com.omersungur.domain.repository.product.ProductRepository
+import com.omersungur.domain.repository.user.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +54,10 @@ object RepositoryModule {
     fun provideCartRepository(
         productApi: ProductApi
     ): CartRepository = CartRepositoryImpl(productApi)
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        productApi: ProductApi
+    ): UserRepository = UserRepositoryImpl(productApi)
 }
