@@ -1,8 +1,10 @@
 package com.omersungur.home.ui.home
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.omersungur.domain.model.cart.AddCartRequest
+import com.omersungur.domain.model.cart.CartProduct
+import com.omersungur.domain.model.cart.CartX
 import com.omersungur.domain.model.category.Category
 import com.omersungur.domain.model.favorite.FavoriteProduct
 import com.omersungur.domain.model.product.ProductX
@@ -97,6 +99,38 @@ class HomeViewModel @Inject constructor(
             }
         }
     }.launchIn(viewModelScope)
+
+    fun addProductsToCart(userId: Int, products: List<CartProduct>) = productRepository.addCart(
+        AddCartRequest(userId, products)
+    ).onEach { result ->
+        when (result) {
+            is Resource.Loading -> {
+                _uiState.update { state ->
+                    state.copy(isRequestSuccess = true)
+                }
+            }
+
+            is Resource.Success -> {
+                _uiState.update { state ->
+                    state.copy(
+                        isHaveError = false,
+                        isRequestSuccess = true,
+                        cartResult = result.data
+                    )
+                }
+            }
+
+            is Resource.Error -> {
+                _uiState.update { state ->
+                    state.copy(
+                        isRequestSuccess = false,
+                        isHaveError = true,
+                        errorMessage = result.errorMessage.orEmpty()
+                    )
+                }
+            }
+        }
+    }.launchIn(viewModelScope)
     
     private fun getFavoriteProduct() = favoriteProductRepository.getFavoriteProduct().onEach { result ->
         _uiState.update { state ->
@@ -119,6 +153,14 @@ class HomeViewModel @Inject constructor(
         return _uiState.value.favoriteProducts.any { it.id == productId }
     }
 
+    fun updateRequestSuccessStatesWithDefaultValues() {
+        _uiState.update {
+            it.copy(
+                isRequestSuccess = false
+            )
+        }
+    }
+
 
     data class HomeUIState(
         val loadingState: Boolean = false,
@@ -127,6 +169,8 @@ class HomeViewModel @Inject constructor(
         val errorMessage: String = "",
         val products: List<ProductX> = emptyList(),
         val categories : List<Category> = emptyList(),
-        val favoriteProducts : List<FavoriteProduct> = emptyList()
+        val favoriteProducts : List<FavoriteProduct> = emptyList(),
+        val isRequestSuccess : Boolean = false,
+        val cartResult : CartX? = null
     )
 }
