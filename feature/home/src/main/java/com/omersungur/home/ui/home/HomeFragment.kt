@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
@@ -67,6 +67,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
+import com.omersungur.domain.model.cart.CartProduct
 import com.omersungur.domain.model.category.Category
 import com.omersungur.domain.model.favorite.FavoriteProduct
 import com.omersungur.domain.model.product.ProductX
@@ -118,7 +119,7 @@ fun HomeScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 8.dp)
+            .padding(top = 8.dp),
     ) {
         Row(
             modifier = modifier
@@ -217,10 +218,13 @@ fun HomeScreen(
                 ProductLazyColumn(
                     products = products,
                     viewModel = viewModel,
-                    onAddToCartClicked = {
 
-                    },
                 )
+            }
+
+            if (isRequestSuccess) {
+                Toast.makeText(LocalContext.current, "Success", Toast.LENGTH_SHORT).show()
+                viewModel.updateRequestSuccessStatesWithDefaultValues()
             }
         }
     }
@@ -263,7 +267,6 @@ fun ProductLazyColumn(
     modifier: Modifier = Modifier,
     products: List<ProductX>,
     viewModel: HomeViewModel,
-    onAddToCartClicked: () -> Unit,
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -300,7 +303,10 @@ fun ProductLazyColumn(
                     }
 
                 },
-                onAddToCartClicked = onAddToCartClicked,
+                onAddToCartClicked = {
+                    val cartProduct = CartProduct(product.id ?: 1, 1)
+                    viewModel.addProductsToCart(cartProduct.id, listOf(cartProduct))
+                },
             )
         }
     }
