@@ -4,17 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -66,19 +69,55 @@ class CartFragment : Fragment() {
 
 @Composable
 fun CartScreen(
-    modifier: Modifier = Modifier,
     viewModel: CartViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     with(uiState) {
         if (isSuccess) {
-            carts.forEach {
-                it.products?.forEach { product ->
-                    CartItemRow(
-                        product = product
-                    ) { a, b ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Cart Summary",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
 
+                Spacer(modifier = Modifier.height(16.dp))
+
+                carts.forEach { cart ->
+                    Text(
+                        text = "Total Products: ${cart.totalProducts}",
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "Total Quantity: ${cart.totalQuantity}",
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "Total: \$${String.format("%.2f", cart.total)}",
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "Discounted Total: \$${String.format("%.2f", cart.discountedTotal)}",
+                        fontSize = 16.sp,
+                        color = Color.Green,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    LazyColumn {
+                        items(carts) { cart ->
+                            cart.products?.forEach {
+                                ProductRow(product = it)
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 1.dp, color = Color.Gray)
+                            }
+                        }
                     }
                 }
             }
@@ -87,16 +126,12 @@ fun CartScreen(
 }
 
 @Composable
-fun CartItemRow(
-    product: ProductCart,
-    onQuantityChange: (Int, Int) -> Unit
-) {
+fun ProductRow(product: ProductCart) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -105,31 +140,19 @@ fun CartItemRow(
                 .build(),
             contentDescription = product.title,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(64.dp)
-                .padding(8.dp)
+            modifier = Modifier.size(64.dp)
         )
 
+        Spacer(modifier = Modifier.width(16.dp))
+
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
+            modifier = Modifier.weight(1f)
         ) {
-            Text(text = product.title ?: "No Data Found", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-
-            Text(text = "$${product.price}", fontSize = 14.sp, color = Color.Gray)
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { onQuantityChange(product.id ?: -1, product.quantity?.minus(1) ?: -1) }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Decrease quantity")
-            }
-
-            Text(text = product.quantity.toString(), fontSize = 16.sp, modifier = Modifier.padding(horizontal = 8.dp))
-
-            IconButton(onClick = { onQuantityChange(product.id ?: -1, product.quantity?.plus(1) ?: -1) }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Increase quantity")
-            }
+            Text(text = product.title ?: "No Data Found!", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Price: \$${String.format("%.2f", product.price)}")
+            Text(text = "Quantity: ${product.quantity}")
+            Text(text = "Total: \$${String.format("%.2f", product.total)}")
+            Text(text = "Discounted Total: \$${String.format("%.2f", product.discountedTotal)}", color = Color.Green)
         }
     }
 }
