@@ -46,3 +46,12 @@ val Color.Companion.C_77707F: Color
 @Stable
 val Color.Companion.C_0E2DAC: Color
     get() = Color(0xFF0E2DAC)
+
+@Stable
+val Color.Companion.C_008B8B: Color
+    get() = Color(0xFF008B8B)
+
+@Stable
+val Color.Companion.C_C58F2D: Color
+    get() = Color(0xFFC58F2D)
+
