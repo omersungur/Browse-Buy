@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -31,14 +29,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
+import com.omersungur.compose_ui.theme.Dimen
 import com.omersungur.domain.model.cart.ProductCart
 
 class CartFragment : Fragment() {
@@ -68,9 +67,7 @@ class CartFragment : Fragment() {
 }
 
 @Composable
-fun CartScreen(
-    viewModel: CartViewModel = hiltViewModel(),
-) {
+fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     with(uiState) {
@@ -78,45 +75,53 @@ fun CartScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(Dimen.spacing_m1),
             ) {
                 Text(
-                    text = "Cart Summary",
-                    fontSize = 24.sp,
+                    text = stringResource(R.string.cart_summary),
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    fontSize = Dimen.font_size_l,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
                 carts.forEach { cart ->
                     Text(
                         text = "Total Products: ${cart.totalProducts}",
-                        fontSize = 16.sp
+                        fontSize = Dimen.font_size_m1,
                     )
+
                     Text(
                         text = "Total Quantity: ${cart.totalQuantity}",
-                        fontSize = 16.sp
+                        fontSize = Dimen.font_size_m1,
                     )
+
                     Text(
                         text = "Total: \$${String.format("%.2f", cart.total)}",
-                        fontSize = 16.sp
+                        fontSize = Dimen.font_size_m1,
                     )
+
                     Text(
                         text = "Discounted Total: \$${String.format("%.2f", cart.discountedTotal)}",
-                        fontSize = 16.sp,
+                        fontSize = Dimen.font_size_s1,
                         color = Color.Green,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
-                    LazyColumn {
-                        items(carts) { cart ->
-                            cart.products?.forEach {
-                                ProductRow(product = it)
-                                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 1.dp, color = Color.Gray)
-                            }
+                LazyColumn {
+                    items(carts) { cart ->
+                        cart.products?.forEach {
+                            ProductRow(product = it)
+
+                            HorizontalDivider(
+                                modifier = Modifier.padding(vertical = Dimen.spacing_xs),
+                                thickness = 1.dp,
+                                color = Color.Gray,
+                            )
                         }
                     }
                 }
@@ -125,33 +130,36 @@ fun CartScreen(
     }
 }
 
+
 @Composable
 fun ProductRow(product: ProductCart) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(Dimen.spacing_xs),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
+            modifier = Modifier.size(64.dp),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(product.thumbnail)
                 .crossfade(true)
                 .build(),
             contentDescription = product.title,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(64.dp)
         )
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(Dimen.spacing_m1))
 
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(text = product.title ?: "No Data Found!", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = product.title ?: "No Data Found!", fontSize = Dimen.font_size_m1, fontWeight = FontWeight.Bold)
+
             Text(text = "Price: \$${String.format("%.2f", product.price)}")
+
             Text(text = "Quantity: ${product.quantity}")
+
             Text(text = "Total: \$${String.format("%.2f", product.total)}")
+
             Text(text = "Discounted Total: \$${String.format("%.2f", product.discountedTotal)}", color = Color.Green)
         }
     }
