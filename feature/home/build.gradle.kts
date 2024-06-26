@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -44,6 +45,7 @@ dependencies {
     implementation(project(":feature:cart"))
     implementation(project(":feature:search"))
     implementation(project(":feature:profile"))
+    implementation(project(":feature:detail"))
     implementation(project(":compose-ui"))
     implementation(project(":data"))
     implementation(project(":domain"))
@@ -75,4 +77,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.navigation.compose.hilt)
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }
