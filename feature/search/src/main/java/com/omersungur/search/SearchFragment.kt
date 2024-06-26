@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +43,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.omersungur.compose_ui.component.bar.CustomProgressBar
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
+import com.omersungur.compose_ui.theme.Dimen
 import com.omersungur.domain.model.product.ProductX
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -93,20 +97,25 @@ fun SearchScreen(
 
     with(uiState) {
         if (loadingState) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CustomProgressBar()
+            }
         }
         if (isSuccess) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(Dimen.spacing_m1),
             ) {
                 var text by remember { mutableStateOf("") }
 
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = Dimen.spacing_xs)
                         .shadow(1.dp, RoundedCornerShape(1.dp)),
                     value = text,
                     onValueChange = {
@@ -129,14 +138,14 @@ fun SearchScreen(
                     placeholder = {
                         Text(text = "Search", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     },
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(Dimen.spacing_xs),
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
                 ProductLazyColumn(
                     modifier = Modifier.fillMaxWidth(),
-                    items = uiState.products
+                    items = uiState.products,
                 )
             }
         }
@@ -146,12 +155,12 @@ fun SearchScreen(
 @Composable
 fun ProductLazyColumn(
     modifier: Modifier = Modifier,
-    verticalArrangement: Arrangement.HorizontalOrVertical = Arrangement.spacedBy(8.dp),
-    items: List<ProductX>
+    verticalArrangement: Arrangement.HorizontalOrVertical = Arrangement.spacedBy(Dimen.spacing_xs),
+    items: List<ProductX>,
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = verticalArrangement
+        verticalArrangement = verticalArrangement,
     ) {
         items(items) {
             ProductColumn(product = it)
@@ -162,7 +171,7 @@ fun ProductLazyColumn(
 @Composable
 fun ProductColumn(
     modifier: Modifier = Modifier,
-    product: ProductX
+    product: ProductX,
 ) {
     val context = LocalContext.current
 
@@ -170,7 +179,7 @@ fun ProductColumn(
         .data(product.thumbnail)
         .memoryCacheKey(product.thumbnail)
         .diskCacheKey(product.thumbnail)
-        .placeholder(com.omersungur.compose_ui.R.drawable.ic_google)
+        .placeholder(com.omersungur.compose_ui.R.drawable.loading)
         .error(com.google.android.material.R.drawable.mtrl_ic_error)
         .diskCachePolicy(CachePolicy.ENABLED)
         .memoryCachePolicy(CachePolicy.ENABLED)
@@ -180,12 +189,12 @@ fun ProductColumn(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .shadow(4.dp, RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp),
+            .padding(vertical = Dimen.spacing_xxs)
+            .shadow(Dimen.spacing_xxs, RoundedCornerShape(Dimen.spacing_xs)),
+        shape = RoundedCornerShape(Dimen.spacing_xs),
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(Dimen.spacing_m1),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
@@ -194,10 +203,10 @@ fun ProductColumn(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(Dimen.spacing_xs))
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(Dimen.spacing_m1))
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -211,7 +220,7 @@ fun ProductColumn(
 
                 RatingBar(rating = product.rating ?: 0.0)
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(Dimen.spacing_xxs))
 
                 Text(
                     text = "Price: \$${String.format("%.2f", product.price)}",
@@ -229,13 +238,13 @@ private fun RatingBar(
     Row(verticalAlignment = Alignment.CenterVertically) {
         repeat(5) { index ->
             val tint = when {
-                index < rating -> Color.Yellow
+                index < rating -> Color.Blue
                 index < rating + 0.5 -> Color.LightGray
                 else -> Color.LightGray
             }
             Icon(
                 imageVector = Icons.Filled.Star,
-                contentDescription = "Star",
+                contentDescription = stringResource(R.string.star_icon),
                 tint = tint
             )
         }
