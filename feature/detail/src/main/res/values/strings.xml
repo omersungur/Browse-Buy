@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_brand_found">No Brand Found!</string>
+    <string name="star_icon">Star Icon</string>
+    <string name="rating_star">Rating Star</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="reviews">Reviews</string>
+</resources>
