@@ -19,4 +19,5 @@
     <string name="cart">Cart</string>
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
+    <string name="detail">Detail</string>
 </resources>
