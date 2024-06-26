@@ -20,4 +20,16 @@
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
     <string name="detail">Detail</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="star_icon">Star Icon</string>
+    <string name="no_brand_found">No Brand Found!</string>
+    <string name="favorite_icon">Favorite Icon</string>
+    <string name="see_all">See All</string>
+    <string name="categories_text">Categories</string>
+    <string name="banner_image">Banner Image</string>
+    <string name="search_text">Search</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="discover">Discover</string>
+    <string name="success">Success</string>
 </resources>
