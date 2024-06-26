@@ -235,7 +235,6 @@ fun HomeScreen(
                 ProductLazyColumn(
                     products = products,
                     viewModel = viewModel,
-
                 )
             }
 
@@ -372,7 +371,7 @@ fun ProductCard(
                         .data(product.thumbnail)
                         .crossfade(true)
                         .build(),
-                    placeholder = painterResource(R.drawable.ic_cart),
+                    placeholder = painterResource(com.omersungur.compose_ui.R.drawable.loading),
                     contentDescription = product.title,
                     contentScale = ContentScale.Fit,
                 )
