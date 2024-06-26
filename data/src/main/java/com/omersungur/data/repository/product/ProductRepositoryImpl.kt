@@ -65,7 +65,7 @@ class ProductRepositoryImpl @Inject constructor(
         try {
             emit(Resource.Loading())
             val product = productApi.getProductById(productId)
-            Resource.Success(product)
+            emit(Resource.Success(product.toProductX()))
         } catch (ex: Exception) {
             emit(Resource.Error(ex.message.toString()))
         }
