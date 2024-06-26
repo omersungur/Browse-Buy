@@ -10,6 +10,7 @@ import com.omersungur.domain.model.favorite.FavoriteProduct
 import com.omersungur.domain.model.product.ProductX
 import com.omersungur.domain.repository.favorite.FavoriteProductRepository
 import com.omersungur.domain.repository.product.ProductRepository
+import com.omersungur.domain.use_cases.auth.logout.LogoutUseCase
 import com.omersungur.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val favoriteProductRepository: FavoriteProductRepository
+    private val favoriteProductRepository: FavoriteProductRepository,
+    private val logOutUseCase: LogoutUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState())
@@ -34,6 +36,12 @@ class HomeViewModel @Inject constructor(
         getProducts()
         getCategories()
         getFavoriteProduct()
+    }
+
+    fun logOutFromFirebase() {
+        viewModelScope.launch {
+            logOutUseCase()
+        }
     }
 
     fun getProducts(query: String = "") = productRepository.getProducts().onEach { result ->
