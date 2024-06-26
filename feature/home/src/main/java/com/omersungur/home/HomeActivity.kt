@@ -2,6 +2,8 @@ package com.omersungur.home
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -11,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.omersungur.home.databinding.ActivityHomeBinding
+import com.omersungur.home.ui.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,6 +21,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +37,6 @@ class HomeActivity : AppCompatActivity() {
             setOf(
                 R.id.nav_home,
                 R.id.nav_search,
-                R.id.nav_logout,
                 R.id.nav_profile,
                 R.id.nav_cart,
                 R.id.nav_category,
@@ -47,6 +50,17 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.log_out -> {
+                viewModel.logOutFromFirebase()
+                finish()
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
