@@ -105,7 +105,7 @@ fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
                     Text(
                         text = "Discounted Total: \$${String.format("%.2f", cart.discountedTotal)}",
                         fontSize = Dimen.font_size_s1,
-                        color = Color.Green,
+                        color = Color.Red,
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -129,7 +129,6 @@ fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
         }
     }
 }
-
 
 @Composable
 fun ProductRow(product: ProductCart) {
@@ -160,7 +159,7 @@ fun ProductRow(product: ProductCart) {
 
             Text(text = "Total: \$${String.format("%.2f", product.total)}")
 
-            Text(text = "Discounted Total: \$${String.format("%.2f", product.discountedTotal)}", color = Color.Green)
+            Text(text = "Discounted Total: \$${String.format("%.2f", product.discountedTotal)}", color = Color.Red)
         }
     }
 }
