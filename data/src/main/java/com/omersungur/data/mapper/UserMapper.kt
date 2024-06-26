@@ -100,3 +100,89 @@ fun HairDto.toHair(): Hair {
         type = type,
     )
 }
+
+fun User.toUserDto(): UserDto {
+    return UserDto(
+        address = address?.toAddressDto(),
+        age = age,
+        bank = bank?.toBankDto(),
+        birthDate = birthDate,
+        bloodGroup = bloodGroup,
+        company = company?.toCompanyDto(),
+        crypto = crypto?.toCryptoDto(),
+        ein = ein,
+        email = email,
+        eyeColor = eyeColor,
+        firstName = firstName,
+        gender = gender,
+        hair = hair?.toHairDto(),
+        height = height,
+        id = id,
+        image = image,
+        ip = ip,
+        lastName = lastName,
+        macAddress = macAddress,
+        maidenName = maidenName,
+        password = password,
+        phone = phone,
+        ssn = ssn,
+        university = university,
+        userAgent = userAgent,
+        username = username,
+        weight = weight,
+        role = role,
+    )
+}
+
+fun Address.toAddressDto(): AddressDto {
+    return AddressDto(
+        country = country,
+        address = address,
+        city = city,
+        coordinates = coordinates?.toCoordinatesDto(),
+        postalCode = postalCode,
+        state = state,
+        stateCode = stateCode,
+    )
+}
+
+fun Coordinates.toCoordinatesDto(): CoordinatesDto {
+    return CoordinatesDto(
+        lat = lat,
+        lng = lng,
+    )
+}
+
+fun Bank.toBankDto(): BankDto {
+    return BankDto(
+        cardExpire = cardExpire,
+        cardNumber = cardNumber,
+        cardType = cardType,
+        currency = currency,
+        iban = iban,
+    )
+}
+
+fun Company.toCompanyDto(): CompanyDto {
+    return CompanyDto(
+        address = address?.toAddressDto(),
+        department = department,
+        name = name,
+        title = title,
+    )
+}
+
+fun Crypto.toCryptoDto(): CryptoDto {
+    return CryptoDto(
+        network = network,
+        wallet = wallet,
+        coin = coin,
+    )
+}
+
+fun Hair.toHairDto(): HairDto {
+    return HairDto(
+        color = color,
+        type = type,
+    )
+}
