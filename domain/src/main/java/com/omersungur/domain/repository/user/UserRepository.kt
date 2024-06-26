@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
 
     fun getUserInfo(userId: Int): Flow<Resource<User>>
+
+    fun updateUser(userId: Int, user: User): Flow<Resource<User>>
 }
