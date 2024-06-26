@@ -25,6 +25,7 @@ import com.omersungur.auth.AuthenticationActivity
 import com.omersungur.compose_ui.theme.C_C8DDFF
 import com.omersungur.domain.util.SharedPref
 import com.omersungur.domain.util.goToTheActivity
+import com.omersungur.home.HomeActivity
 import com.omersungur.onboarding.OnboardingActivity
 import kotlinx.coroutines.delay
 
@@ -65,10 +66,10 @@ class SplashActivity : ComponentActivity() {
 }
 
 private fun checkShowedOnboardingStateAndGoOtherActivity(activity: Activity) {
-    if (SharedPref(context = activity).isShowingOnboardingScreen()) {
+    if (SharedPref(context = activity).isLoggedIn()) {
+        activity.goToTheActivity(activityToGo = HomeActivity(), isFinish = true)
+    } else if (SharedPref(context = activity).isShowingOnboardingScreen()) {
         activity.goToTheActivity(activityToGo = OnboardingActivity(), isFinish = true)
-    } else if (SharedPref(context = activity).isLoggedIn()) {
-        // TODO: Go to the main activity
     } else {
         activity.goToTheActivity(activityToGo = AuthenticationActivity(), isFinish = true)
     }
