@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:auth"))
+    implementation(project(":feature:home"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
