@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -56,12 +57,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.omersungur.auth.R
 import com.omersungur.auth.navigation.AuthenticationScreens
+import com.omersungur.compose_ui.component.bar.CustomProgressBar
 import com.omersungur.compose_ui.component.button.BBGoogleAuthButton
 import com.omersungur.compose_ui.component.text_field.BBOutlinedTextField
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.compose_ui.theme.C_3347C4
 import com.omersungur.compose_ui.theme.Dimen
 import com.omersungur.domain.model.jwt_user.JWTUser
+import com.omersungur.domain.util.SharedPref
 import com.omersungur.home.HomeActivity
 
 @Composable
@@ -83,17 +86,28 @@ fun SignInScreen(
 
     with(uiState) {
         if (isLoading) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CustomProgressBar()
+            }
             return@with
         }
 
         if (isSuccessEmailAndPasswordLogin) {
             Toast.makeText(LocalContext.current, "Login Success", Toast.LENGTH_SHORT).show()
+            if(checkedRememberMe) {
+                SharedPref(LocalContext.current).saveLoggedInState()
+            }
             goToTheActivity(HomeActivity())
         }
 
         if (isSuccessJWTLogin) {
             Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
+            if(checkedRememberMe) {
+                SharedPref(LocalContext.current).saveLoggedInState()
+            }
             goToTheActivity(HomeActivity())
         }
 
@@ -277,17 +291,6 @@ fun SignInScreen(
             ) {
                 // TODO: Login with Google
             }
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun SignInScreenPreview() {
-    BrowseAndBuyAppTheme {
-        SignInScreen(navController = rememberNavController()) {
-            // sonar - comment
         }
     }
 }
