@@ -26,9 +26,7 @@ class OnboardingActivity : ComponentActivity() {
             BrowseAndBuyAppTheme {
                 Scaffold { paddingValues ->
                     Surface(modifier = Modifier.padding(paddingValues)) {
-                        OnboardingNavGraph(
-                            navController = navController
-                        ) {
+                        OnboardingNavGraph(navController = navController) {
                             intentToAuth()
                         }
                     }
