@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -44,6 +45,7 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.omersungur.compose_ui.component.bar.CustomProgressBar
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
 import com.omersungur.compose_ui.theme.C_C58F2D
 import com.omersungur.compose_ui.theme.Dimen
@@ -87,7 +89,12 @@ fun CategoryScreen(
 
     with(uiState) {
         if (loadingState) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CustomProgressBar()
+            }
         }
 
         Column(modifier = modifier.fillMaxSize()) {
