@@ -12,10 +12,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 @Stable
-val Color.Companion.Primary: Color
-    get() = Color(0xFF093D97)
-
-@Stable
 val Color.Companion.C_F4F7FF: Color
     get() = Color(0xFFF4F7FF)
 
@@ -53,5 +49,5 @@ val Color.Companion.C_008B8B: Color
 
 @Stable
 val Color.Companion.C_C58F2D: Color
-    get() = Color(0xFFC58F2D)
+    get() = Color(0xFFFFA400)
 
