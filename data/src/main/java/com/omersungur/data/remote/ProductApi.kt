@@ -9,9 +9,11 @@ import com.omersungur.data.remote.dto.jwt_user.JWTUserDto
 import com.omersungur.data.remote.dto.product.ProductDto
 import com.omersungur.data.remote.dto.product.ProductXDto
 import com.omersungur.data.remote.dto.user.UserDto
+import com.omersungur.domain.model.user.User
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ProductApi {
@@ -39,4 +41,7 @@ interface ProductApi {
 
     @POST("carts/add")
     suspend fun addCart(@Body addCartRequest: AddCartRequestDto): CartXDto
+
+    @PUT("users/{id}")
+    suspend fun updateUser(@Path("id") userId: Int, @Body user: UserDto): UserDto
 }
