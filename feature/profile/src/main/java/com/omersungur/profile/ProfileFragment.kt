@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,7 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
-import com.omersungur.domain.model.user.User
+import com.omersungur.domain.model.mock.mockUser
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -116,6 +119,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(text = "Email: ${it.email}", fontSize = 16.sp)
+
                     Text(text = "Phone: ${it.phone}", fontSize = 16.sp)
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -129,6 +133,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(text = it.address?.address ?: "No Data Found!", fontSize = 16.sp)
+
                     Text(text = "${it.address?.city}, ${it.address?.state}, ${it.address?.country}", fontSize = 16.sp)
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -154,6 +159,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(text = it.company?.name ?: "No Data Found!", fontSize = 16.sp)
+
                     Text(text = "${it.company?.department}, ${it.company?.title}", fontSize = 16.sp)
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -167,11 +173,30 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(text = "Coin: ${it.crypto?.coin}", fontSize = 16.sp)
+
                     Text(text = "Wallet: ${it.crypto?.wallet}", fontSize = 16.sp)
+
                     Text(text = "Network: ${it.crypto?.network}", fontSize = 16.sp)
+
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        onClick = {
+                            viewModel.updateUserInfo(1, mockUser)
+                        },
+                    ) {
+                        Text(text = "UPDATE")
+                    }
+
+                    if (isSuccessForUpdatedUser) {
+                        Toast.makeText(LocalContext.current, "Updated Successfully", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
-
     }
 }
+
+
+

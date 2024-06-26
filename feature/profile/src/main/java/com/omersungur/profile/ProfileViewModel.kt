@@ -23,10 +23,10 @@ class ProfileViewModel @Inject constructor(
     val uiState: StateFlow<ProfileUIState> = _uiState.asStateFlow()
 
     init {
-        getProducts(1)
+        getUserInfo(1)
     }
 
-    fun getProducts(userId: Int) = userRepository.getUserInfo(userId).onEach { result ->
+    private fun getUserInfo(userId: Int) = userRepository.getUserInfo(userId).onEach { result ->
         when (result) {
             is Resource.Loading -> {
                 _uiState.update { state ->
@@ -40,6 +40,37 @@ class ProfileViewModel @Inject constructor(
                         loadingState = false,
                         isHaveError = false,
                         isSuccess = true,
+                        user = state.updatedUser ?: result.data
+                    )
+                }
+            }
+
+            is Resource.Error -> {
+                _uiState.update { state ->
+                    state.copy(
+                        loadingState = false,
+                        isHaveError = true,
+                        errorMessage = result.errorMessage.orEmpty()
+                    )
+                }
+            }
+        }
+    }.launchIn(viewModelScope)
+
+    fun updateUserInfo(userId: Int, user: User) = userRepository.updateUser(userId, user).onEach { result ->
+        when (result) {
+            is Resource.Loading -> {
+                _uiState.update { state ->
+                    state.copy(loadingState = true)
+                }
+            }
+
+            is Resource.Success -> {
+                _uiState.update { state ->
+                    state.copy(
+                        loadingState = false,
+                        isHaveError = false,
+                        isSuccessForUpdatedUser = true,
                         user = result.data
                     )
                 }
@@ -61,7 +92,9 @@ class ProfileViewModel @Inject constructor(
         val loadingState: Boolean = false,
         val isHaveError: Boolean = false,
         val isSuccess: Boolean = false,
+        val isSuccessForUpdatedUser: Boolean = false,
         val errorMessage: String = "",
-        val user: User? = null
+        val user: User? = null,
+        val updatedUser: User? = null
     )
 }
