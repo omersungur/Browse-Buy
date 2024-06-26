@@ -23,7 +23,9 @@ import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.omersungur.auth.navigation.AuthenticationNavGraph
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
+import com.omersungur.domain.util.SharedPref
 import com.omersungur.domain.util.goToTheActivity
+import com.omersungur.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -83,16 +85,18 @@ class AuthenticationActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             BrowseAndBuyAppTheme {
-
-
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
                         AuthenticationNavGraph(navController = navController) {
-                            goToTheActivity(activityToGo = it, isFinish = true)
+                            intentToHome()
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun intentToHome() {
+        goToTheActivity(HomeActivity(), true)
     }
 }
