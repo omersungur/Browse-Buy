@@ -210,7 +210,7 @@ fun HomeScreen(
                 CircularProgressIndicator()
             }
 
-            if (isSuccess) {
+            if (isSuccessForDetail) {
                 CategoryLazyRow(categories = categories)
 
                 Spacer(modifier = Modifier.height(8.dp))

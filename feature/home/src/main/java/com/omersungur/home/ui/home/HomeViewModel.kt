@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
                     state.copy(
                         loadingState = false,
                         isHaveError = false,
-                        isSuccess = true,
+                        isSuccessForDetail = true,
                         products = result.data?.products?.filter {
                             it.title?.contains(query, ignoreCase = true) ?: false
                         } ?: emptyList()
@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
                     state.copy(
                         loadingState = false,
                         isHaveError = false,
-                        isSuccess = true,
+                        isSuccessForDetail = true,
                         categories = result.data ?: emptyList()
                     )
                 }
@@ -135,7 +135,7 @@ class HomeViewModel @Inject constructor(
     private fun getFavoriteProduct() = favoriteProductRepository.getFavoriteProduct().onEach { result ->
         _uiState.update { state ->
             state.copy(
-                isSuccess = true,
+                isSuccessForDetail = true,
                 favoriteProducts = result
             )
         }
@@ -165,7 +165,7 @@ class HomeViewModel @Inject constructor(
     data class HomeUIState(
         val loadingState: Boolean = false,
         val isHaveError: Boolean = false,
-        val isSuccess: Boolean = false,
+        val isSuccessForDetail: Boolean = false,
         val errorMessage: String = "",
         val products: List<ProductX> = emptyList(),
         val categories : List<Category> = emptyList(),
