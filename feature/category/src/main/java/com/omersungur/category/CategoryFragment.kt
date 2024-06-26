@@ -37,14 +37,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
+import com.omersungur.compose_ui.theme.C_C58F2D
+import com.omersungur.compose_ui.theme.Dimen
 import com.omersungur.domain.model.product.ProductX
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -91,11 +93,11 @@ fun CategoryScreen(
         Column(modifier = modifier.fillMaxSize()) {
             if (isSuccess) {
                 FlowRow(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(Dimen.spacing_xs),
                 ) {
                     categories.forEach {
                         SuggestionChip(
-                            modifier = Modifier.padding(horizontal = 4.dp),
+                            modifier = Modifier.padding(horizontal = Dimen.spacing_xxs),
                             onClick = {
                                 viewModel.getProductsByCategory(it.slug ?: "beauty")
                             },
@@ -105,7 +107,7 @@ fun CategoryScreen(
                 }
             }
 
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = Dimen.spacing_xs))
 
             if (categorySuccess) {
                 LazyColumn {
@@ -126,58 +128,60 @@ fun ProductsByCategoryRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(Dimen.spacing_m1),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AsyncImage(
+            modifier = Modifier
+                .size(80.dp)
+                .padding(Dimen.spacing_xs),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(product.thumbnail)
                 .crossfade(true)
                 .build(),
             contentDescription = product.title,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(80.dp)
-                .padding(8.dp)
         )
 
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Dimen.spacing_m1),
         ) {
             Text(
-                text = product.title ?: "No Data Found",
-                fontSize = 18.sp,
+                text = product.title ?: stringResource(R.string.no_data_found),
+                fontSize = Dimen.font_size_18,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.Black,
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+
+            Spacer(modifier = Modifier.height(Dimen.spacing_xs))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
+                    modifier = Modifier.size(Dimen.spacing_m2),
                     imageVector = Icons.Outlined.Star,
-                    contentDescription = "Star Icon",
-                    tint = Color(0xFFFFA500),
-                    modifier = Modifier.size(20.dp)
+                    contentDescription = stringResource(R.string.star_icon),
+                    tint = Color.C_C58F2D,
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+
+                Spacer(modifier = Modifier.width(Dimen.spacing_xxs))
+
                 Text(
                     text = product.rating.toString(),
-                    fontSize = 16.sp,
-                    color = Color.Gray
+                    fontSize = Dimen.font_size_m1,
+                    color = Color.Gray,
                 )
             }
         }
 
         Text(
             text = "$${product.price}",
-            fontSize = 16.sp,
+            modifier = Modifier.padding(horizontal = Dimen.spacing_xs),
+            fontSize = Dimen.font_size_m1,
             fontWeight = FontWeight.SemiBold,
             color = Color.Black,
-            modifier = Modifier.padding(horizontal = 8.dp)
         )
     }
 }
