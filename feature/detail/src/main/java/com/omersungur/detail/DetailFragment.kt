@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,17 +21,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -46,17 +43,19 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.omersungur.compose_ui.component.bar.CustomProgressBar
 import com.omersungur.compose_ui.theme.BrowseAndBuyAppTheme
-import com.omersungur.domain.model.favorite.FavoriteProduct
+import com.omersungur.compose_ui.theme.C_C58F2D
+import com.omersungur.compose_ui.theme.Dimen
 import com.omersungur.domain.model.product.ProductX
 import com.omersungur.domain.model.product.Review
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,21 +94,34 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
 
     with(uiState) {
         if (loadingStateForProducts) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CustomProgressBar()
+            }
         }
 
         if (loadingStateForDetail) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CustomProgressBar()
+            }
         }
 
         if (isSuccessForProducts) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(Dimen.spacing_m1)
                     .verticalScroll(rememberScrollState())
             ) {
-                ProductRowColumn(products = products, detailViewModel = viewModel)
+                ProductRowColumn(
+                    products = products,
+                    detailViewModel = viewModel,
+                )
 
                 if (isSuccess) {
                     product?.let {
@@ -120,53 +132,53 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
                                 .fillMaxWidth()
                                 .height(500.dp)
                                 .padding(10.dp),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
                         Text(
                             text = it.title ?: "",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp,
-                            color = Color.Black
+                            fontSize = Dimen.font_size_l,
+                            color = Color.Black,
                         )
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_xs))
 
-                        Text(text = "Brand: ${it.brand}", fontSize = 16.sp, color = Color.Gray)
+                        Text(text = "Brand: ${it.brand}", fontSize = Dimen.font_size_m1, color = Color.Gray)
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_xs))
 
-                        Text(text = "Price: $${it.price}", fontSize = 20.sp, color = Color.Red)
+                        Text(text = "Price: $${it.price}", fontSize = Dimen.font_size_m2, color = Color.Red)
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_xs))
 
-                        Text(text = "Rating: ${it.rating}", fontSize = 16.sp, color = Color.Black)
+                        Text(text = "Rating: ${it.rating}", fontSize = Dimen.font_size_m1, color = Color.Black)
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_xs))
 
-                        Text(text = it.description ?: "", fontSize = 16.sp, color = Color.DarkGray)
+                        Text(text = it.description ?: "", fontSize = Dimen.font_size_m1, color = Color.DarkGray)
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
-                        Text(text = "Reviews", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                        Text(text = stringResource(R.string.reviews), fontWeight = FontWeight.Bold, fontSize = Dimen.font_size_m2)
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_xs))
 
                         it.reviews?.forEach { review ->
                             ReviewItem(review = review)
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Dimen.spacing_m1))
 
                         Button(
                             onClick = { /* TODO: Add to cart action */ },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 16.dp)
+                                .padding(vertical = Dimen.spacing_m1)
                         ) {
-                            Text(text = "Add to Cart")
+                            Text(text = stringResource(R.string.add_to_cart))
                         }
                     }
                 }
@@ -180,26 +192,26 @@ fun ReviewItem(review: Review) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = Dimen.spacing_xxs),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             repeat(review.rating ?: 0) {
                 Icon(
                     imageVector = Icons.Default.Star,
-                    contentDescription = "Rating Star",
-                    tint = Color.Yellow
+                    contentDescription = stringResource(R.string.rating_star),
+                    tint = Color.Yellow,
                 )
             }
         }
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(Dimen.spacing_xxs))
 
-        Text(text = review.comment ?: "", fontSize = 14.sp)
+        Text(text = review.comment ?: "", fontSize = Dimen.font_size_m1)
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(Dimen.spacing_xxs))
 
-        Text(text = "- ${review.reviewerName}", fontSize = 12.sp, color = Color.Gray)
+        Text(text = "- ${review.reviewerName}", fontSize = Dimen.font_size_s1, color = Color.Gray)
 
-        HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
+        HorizontalDivider(thickness = Dimen.spacing_xxxs, color = Color.LightGray)
     }
 }
 
@@ -207,7 +219,7 @@ fun ReviewItem(review: Review) {
 fun ProductRowColumn(
     modifier: Modifier = Modifier,
     products: List<ProductX>,
-    detailViewModel: DetailViewModel
+    detailViewModel: DetailViewModel,
 ) {
     LazyRow(
         modifier = modifier,
@@ -231,31 +243,29 @@ fun ProductCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = Dimen.spacing_m1)
             .clickable {
                 onClickForProductId(product.id ?: 1)
             },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background,
-        ),
-        border = BorderStroke(width = 2.dp, color = Color(0xFFFFA500)),
-        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        border = BorderStroke(width = Dimen.spacing_xxxs, color = Color.C_C58F2D),
+        shape = RoundedCornerShape(Dimen.spacing_m1),
     ) {
         Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = Dimen.spacing_xs),
             ) {
                 AsyncImage(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(Dimen.spacing_xs)
                         .align(Alignment.CenterVertically),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(product.thumbnail)
                         .crossfade(true)
                         .build(),
-                    placeholder = painterResource(com.omersungur.compose_ui.R.drawable.ic_google),
+                    placeholder = painterResource(com.omersungur.compose_ui.R.drawable.loading),
                     contentDescription = product.title,
                     contentScale = ContentScale.Fit,
                 )
@@ -267,7 +277,7 @@ fun ProductCard(
                 text = product.title.orEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = Dimen.spacing_xs),
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Normal,
@@ -276,10 +286,10 @@ fun ProductCard(
             )
 
             Text(
-                text = product.brand ?: "No Brand Found!",
+                text = product.brand ?: stringResource(R.string.no_brand_found),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = Dimen.spacing_xs),
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = FontFamily.SansSerif,
                 color = Color.Black,
@@ -289,22 +299,22 @@ fun ProductCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp),
+                    .padding(vertical = Dimen.spacing_xxs),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = "$${product.price}",
-                    modifier = Modifier.padding(horizontal = 8.dp),
+                    modifier = Modifier.padding(horizontal = Dimen.spacing_xs),
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color.Black,
                 )
 
-                Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+                Row(modifier = Modifier.padding(horizontal = Dimen.spacing_xs)) {
                     Icon(
                         imageVector = Icons.Outlined.Star,
-                        contentDescription = "Star Icon",
-                        tint = Color(0xFFFFA500),
+                        contentDescription = stringResource(R.string.star_icon),
+                        tint = Color.C_C58F2D,
                     )
 
                     Text(text = formattedRating)
