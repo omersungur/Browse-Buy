@@ -12,18 +12,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.StarHalf
-import androidx.compose.material.icons.automirrored.outlined.StarHalf
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarHalf
-import androidx.compose.material.icons.filled.StarRate
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material.icons.sharp.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,14 +33,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -97,14 +96,18 @@ fun SearchScreen(
             CircularProgressIndicator()
         }
         if (isSuccess) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
                 var text by remember { mutableStateOf("") }
-
 
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(vertical = 8.dp)
+                        .shadow(1.dp, RoundedCornerShape(1.dp)),
                     value = text,
                     onValueChange = {
                         text = it
@@ -115,24 +118,25 @@ fun SearchScreen(
                             viewModel.filterProduct(it)
                         }
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Sharp.Search,
-                            tint = MaterialTheme.colorScheme.outline,
-                            contentDescription = "Back button"
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            contentDescription = "Search Icon"
                         )
                     },
                     placeholder = {
-                        Text(text = "Search")
+                        Text(text = "Search", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     },
+                    shape = RoundedCornerShape(8.dp)
                 )
-                
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ProductLazyColumn(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    items = uiState.products,
+                    modifier = Modifier.fillMaxWidth(),
+                    items = uiState.products
                 )
             }
         }
@@ -173,56 +177,67 @@ fun ProductColumn(
         .crossfade(true)
         .build()
 
-    Card(modifier = modifier.fillMaxWidth()) {
-        Row {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .shadow(4.dp, RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             AsyncImage(
                 model = imageRequest,
                 contentDescription = product.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(8.dp))
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     text = product.title ?: "No Data Found!",
-                    modifier = Modifier.fillMaxWidth(),
-                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 RatingBar(rating = product.rating ?: 0.0)
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "Price: \$${String.format("%.2f", product.price)}",
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }
 }
+
 @Composable
 private fun RatingBar(
     rating: Double,
 ) {
-    if (rating < 2.0) {
-        Icon(
-            imageVector = Icons.Outlined.StarRate,
-            contentDescription = "Star",
-            tint = Color.Red
-        )
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        repeat(5) { index ->
+            val tint = when {
+                index < rating -> Color.Yellow
+                index < rating + 0.5 -> Color.LightGray
+                else -> Color.LightGray
+            }
+            Icon(
+                imageVector = Icons.Filled.Star,
+                contentDescription = "Star",
+                tint = tint
+            )
+        }
     }
-    else if (rating < 4.0) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Outlined.StarHalf,
-            contentDescription = "Star",
-            tint = Color.Green
-        )
-    }
-    else {
-        Icon(
-            imageVector = Icons.Outlined.Star,
-            contentDescription = "Star",
-            tint = Color.Yellow
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun RatingBarPreview() {
-    RatingBar(rating = 4.0)
 }
