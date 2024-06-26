@@ -15,7 +15,7 @@ class SharedPref(context: Context) {
 
     fun saveLoggedInState() {
         val editor = sharedPreferences.edit()
-        editor.putBoolean(KEY_OF_LOGGED_IN_STATE, false)
+        editor.putBoolean(KEY_OF_LOGGED_IN_STATE, true)
         editor.apply()
     }
 
