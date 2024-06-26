@@ -146,6 +146,7 @@ fun ProductsByCategoryRow(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(product.thumbnail)
                 .crossfade(true)
+                .placeholder(com.omersungur.compose_ui.R.drawable.loading)
                 .build(),
             contentDescription = product.title,
             contentScale = ContentScale.Crop,
