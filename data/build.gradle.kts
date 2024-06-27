@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
-    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation (libs.converter.gson)
 }
 
 kapt {

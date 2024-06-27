@@ -47,7 +47,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.compose.ui:ui:1.6.8")
+    implementation(libs.ui)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -58,6 +58,6 @@ dependencies {
     implementation(libs.navigation.compose.hilt)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.coil)
     implementation(libs.androidx.material.icons.extended)
 }

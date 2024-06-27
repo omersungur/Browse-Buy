@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("dagger.hilt.android.plugin")
-    id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -66,9 +66,9 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.glide)
-    implementation("io.coil-kt:coil-compose:2.6.0")
-    implementation("androidx.compose.ui:ui:1.6.8")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
+    implementation(libs.coil)
+    implementation(libs.ui)
+    implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

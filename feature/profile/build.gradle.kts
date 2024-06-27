@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.hilt.android)
     id("org.jetbrains.kotlin.kapt")
 }
 
@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.material.v190)
-    implementation("androidx.compose.ui:ui:1.6.8")
+    implementation(libs.ui)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -67,5 +67,5 @@ dependencies {
     implementation(libs.navigation.compose.hilt)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.coil)
 }

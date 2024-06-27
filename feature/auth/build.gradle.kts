@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt.android)
-    id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.google.services)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
