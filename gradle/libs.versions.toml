@@ -1,5 +1,6 @@
 [versions]
 agp = "8.4.2"
+converterGson = "2.11.0"
 google-services = "4.4.2"
 firebase-crashlytics = "3.0.1"
 kotlin = "1.9.23"
@@ -39,11 +40,15 @@ glide = "4.16.0"
 firebaseMessagingKtx = "24.0.0"
 firebaseMessaging = "24.0.0"
 firebaseConfig = "22.0.0"
+ui = "1.6.8"
+uiTextGoogleFonts = "1.6.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "composeMaterial" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -97,6 +102,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
+ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
